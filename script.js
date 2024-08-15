@@ -33,6 +33,23 @@ player2Button.addEventListener('click', () => handlePlayerClick(2));
 submitAnswerButton.addEventListener('click', checkAnswer);
 nextFlagButton.addEventListener('click', loadNextFlag);
 
+// Add event listener for Enter key in the answer input field
+answerInput.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent the default form submission behavior
+        checkAnswer(); // Call the function to check the answer
+    }
+});
+
+// Add event listener for keyboard keys
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'a') {
+        handlePlayerClick(1);
+    } else if (event.key === 'l') {
+        handlePlayerClick(2);
+    }
+});
+
 function loadNextFlag() {
     if (availableFlags.length === 0) {
         result.innerHTML = 'No hay más banderas!';
@@ -45,11 +62,14 @@ function loadNextFlag() {
     result.textContent = '';
     answerInput.value = '';
     answerInput.disabled = true;
-
+    
     player1Button.classList.remove('active', 'disabled');
     player2Button.classList.remove('active', 'disabled');
     player1Button.disabled = false;
     player2Button.disabled = false;
+
+    // Hide the next flag button at the start of a new round
+    nextFlagButton.style.display = 'none';
 
     hasAnswered = { player1: false, player2: false };
     isGameActive = true;
@@ -71,7 +91,6 @@ function removeAccents(str) {
               .replace(/[\u0300-\u036f]/g, '')  // Remove diacritical marks
               .toLowerCase();  // Convert to lowercase
 }
-
 
 function checkAnswer() {
     if (currentPlayer !== null && isGameActive) {
@@ -147,7 +166,6 @@ function checkAnswer() {
         }
     }
 }
-
 
 function updateScore() {
     scoreDisplay.textContent = `Puntaje: Jugador 1 - ${scores.player1}, Jugador 2 - ${scores.player2}`;
