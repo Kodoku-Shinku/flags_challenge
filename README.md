@@ -1,1 +1,1 @@
-# flags_game
+# flags_challenge
