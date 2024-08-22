@@ -1,4 +1,4 @@
-// banderas.js
+// flags.js
 
 // Array of flag objects with their URLs and names
 const flags = [

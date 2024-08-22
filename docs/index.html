@@ -5,63 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego de Banderas</title>
     <link rel="icon" type="image/x-icon" href="assets/images/misc/favicon.ico">
-    <link rel="stylesheet" href="src/css/styles.css">
     <link rel="stylesheet" href="src/css/bootstrap.min.css">
+    <link rel="stylesheet" href="src/css/styles.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+        .btn {
+            width: 200px;
+            margin: 10px;
+        }
+    </style>
 </head>
 <body>
-    <div id="app" class="container text-center">
-        <div class="row">
-            
-            <div class="col-md-3 align-self-start d-flex flex-column align-items-center justify-content-center">
-                <div class="img-container mb-3 h-50 w-50">
-                    <img src="assets/images/players/player1.jpg" alt="Jugador 1" class="img-fluid">
-                </div>
-                <div class="rounded-circle img-container mb-3 w-75">
-                    <img src="assets/images/avatar/yan.png" alt="Jugador 1" class="img-fluid rounded-circle">
-                </div>
-                <div>
-                    <button class="playerButton btn btn-danger" id="player1Button">Jugador 1</button>
-                </div>
-                <div>
-                    <h1 id="scoreP1"><strong>0</strong></h1>
-                </div>
-            </div>
-
-            <div class="col-md-6 align-self-center text-center">
-                <button class="btn btn-primary mb-4" id="startButton">Iniciar Juego</button>
-                <div id="gameArea" style="display: none;">
-                    <img class="img-fluid rounded mb-4" id="flagImage" src="" alt="Bandera">
-                    <div class="text-center">
-                        <input class="mb-3" type="text" id="answerInput" placeholder="Nombre del país">
-                        <button class="btn btn-primary m-3" id="submitAnswerButton">Enviar Respuesta</button>
-                    </div>
-                    <h5 id="result"></h5>
-                    <h5 id="flagName"></h5> <!-- Added this element for flag name -->
-
-                    <!-- Centering the button with a wrapper div -->
-                    <div class="d-flex justify-content-center my-3">
-                        <button class="btn btn-success" id="nextFlagButton" style="display: none;">Siguiente Bandera</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3 align-self-start d-flex flex-column align-items-center justify-content-center">
-                <div class="img-container mb-3 h-50 w-50">
-                    <img src="assets/images/players/player2.jpg" alt="Jugador 2" class="img-fluid">
-                </div>
-                <div class="rounded-circle img-container mb-3 w-75">
-                    <img src="assets/images/avatar/ger.png" alt="Jugador 2" class="img-fluid rounded-circle">
-                </div>
-                <div>
-                    <button class="playerButton btn btn-danger" id="player2Button">Jugador 2</button>
-                </div>
-                <div>
-                    <h1 id="scoreP2"><strong>0</strong></h1>
-                </div>
-            </div>
-        </div>
+    <div class="text-center">
+        <h1 class="mb-4">Selecciona el Modo de Juego</h1>
+        <a href="singleplayer.html" class="btn btn-primary">Modo de Un Jugador</a>
+        <a href="multiplayer.html" class="btn btn-secondary">Modo Multijugador</a>
     </div>
-    <script type="module" src="src/js/script.js"></script>
-    <script type="text/javascript" src="src/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
