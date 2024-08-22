@@ -10,57 +10,113 @@ body, html {
 }
 
 #flagImage {
-    width: 400px;
+    width: 520px;
     height: auto;
     margin: 20px 0;
 }
 
-.playerButton {
-    background-color: red;
-    color: white;
-    padding: 10px 20px;
-    margin: 10px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
+.scoreText {
+    font-size: 60px;
 }
 
-.playerButton.active {
-    background-color: green;
+.player1 {
+    width: 150px;
+    height: 60px;
 }
 
-.playerButton.disabled {
-    background-color: gray;
-    cursor: not-allowed;
+
+/* Imagen del avatar del jugador */
+
+.circle-image::before {
+    /* Se pone el tipo de content cada que se usa el before */
+    content: normal;
+
+    /* Alinear en el centro vertical */
+    top: 50%;
+    /* Alinear a la izquierda */
+    left: 0;
+    /* Ancho del elemento */
+    width: 100%;
+    /* Altura del elemento */
+    height: 50%;
+    /* Color de fondo */
+    background-color: #ff5100;
+    /* Radio de borde */
+    border-radius: 50% 50% 0 0;
+    /*Índice de apilamiento para colocar el elemento detrás de la imagen */
+    z-index: -1;
 }
 
-#answerInput {
-    margin-top: 10px;
-    padding: 10px;
-    font-size: 16px;
+.circle-image img {
+    /* Ancho de la imagen */
+    width: 240px;
+    /* Altura de la imagen */
+    height: 240px;
+    /* Ajuste del contenido de la imagen */
+    object-fit: cover;
+    /* Radio de borde para hacerla circular */
+    border-radius: 50%;
+    /* Color del borde */
+    border: 3px solid #6758f0;
+    /* Margen superior de la imagen */
+    margin-top: 3px;
+    /* Margen inferior de la imagen */
+    margin-bottom: 3px;
 }
 
-/*#nextFlagButton {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: blue;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
+/* Imagen del avatar del jugador */
+
+/* ANIMACIONES */
+
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 0 0 rgba(103, 88, 240, 0.5);
+    }
+
+    50% {
+        box-shadow: 0 0 20px 10px rgba(50, 211, 255, 0.7);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 221, 0.5);
+    }
 }
 
-#nextFlagButton:hover {
-    background-color: darkblue;
+@keyframes pedro-pedro {
+    0% {
+        transform: rotate(0deg) scale(1);
+    }
+    25% {
+        transform: rotate(-90deg) scale(1.1);
+    }
+    50% {
+        transform: rotate(-180deg) scale(1);
+    }
+    75% {
+        transform: rotate(-270deg) scale(1.1);
+    }
+    100% {
+        transform: rotate(-360deg) scale(1);
+    }
 }
 
-#result {
-    font-size: 18px;
-    margin-top: 10px;
+@keyframes bounce {
+    to {
+      translate: 0 20px;
+    }
+  }
+
+.animation-active img {
+    animation: pedro-pedro 3s linear infinite, bounce 0.2s linear infinite alternate;
 }
 
-#flagName {
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 10px;
-}*/
+/* Efecto de glow en la imagen */
+.glow img {
+    -webkit-animation: glow 3s infinite;
+    -moz-animation: glow 3s infinite;
+    -o-animation: glow 3s infinite;
+    animation: glow 3s infinite;
+}
+
+
+/* ANIMACIONES */ 
