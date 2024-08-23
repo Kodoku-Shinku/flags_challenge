@@ -13,14 +13,14 @@
         <div class="row">
             
             <div class="col-md-3 align-self-start d-flex flex-column align-items-center justify-content-center">
-                <div class="img-container mb-3 h-50 w-50">
-                    <img src="assets/images/players/player1.jpg" alt="Jugador 1" class="img-fluid">
+                <div class="img-container mb-3">
+                    <img src="assets/images/players/player1.jpg" alt="Jugador 1" class="img-fluid player">
                 </div>
-                <div class="rounded-circle img-container mb-3 w-75">
-                    <img src="assets/images/avatar/yan.png" alt="Jugador 1" class="img-fluid rounded-circle">
+                <div id="player1" class="circle-image glow img-container my-3">
+                    <img src="assets/images/avatar/yan.png" alt="Jugador 1" class="img-fluid">
                 </div>
                 <div>
-                    <button class="playerButton btn btn-danger" id="player1Button">Jugador 1</button>
+                    <button class="playerButton btn btn-danger my-3" id="player1Button">Jugador 1</button>
                 </div>
                 <div>
                     <h1 id="scoreP1"><strong>0</strong></h1>
@@ -46,14 +46,14 @@
             </div>
 
             <div class="col-md-3 align-self-start d-flex flex-column align-items-center justify-content-center">
-                <div class="img-container mb-3 h-50 w-50">
-                    <img src="assets/images/players/player2.jpg" alt="Jugador 2" class="img-fluid">
+                <div class="img-container mb-3">
+                    <img src="assets/images/players/player2.jpg" alt="Jugador 2" class="img-fluid player">
                 </div>
-                <div class="rounded-circle img-container mb-3 w-75">
-                    <img src="assets/images/avatar/ger.png" alt="Jugador 2" class="img-fluid rounded-circle">
+                <div id="player2" class="circle-image glow img-container my-3">
+                    <img src="assets/images/avatar/ger.png" alt="Jugador 2" class="img-fluid">
                 </div>
                 <div>
-                    <button class="playerButton btn btn-danger" id="player2Button">Jugador 2</button>
+                    <button class="playerButton btn btn-danger my-3" id="player2Button">Jugador 2</button>
                 </div>
                 <div>
                     <h1 id="scoreP2"><strong>0</strong></h1>
@@ -61,6 +61,8 @@
             </div>
         </div>
     </div>
+    <!-- Elemento de audio justo antes del cierre del body -->
+    <audio id="correctAnswerAudio" src="assets/audio/PEDRO.mp3"></audio>
     <script type="module" src="src/js/multiplayer.js"></script>
     <script type="text/javascript" src="src/js/bootstrap.bundle.min.js"></script>
 </body>

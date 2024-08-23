@@ -16,6 +16,7 @@ const scoreP1Display = document.getElementById('scoreP1');
 const scoreP2Display = document.getElementById('scoreP2');
 const nextFlagButton = document.getElementById('nextFlagButton');
 const flagName = document.getElementById('flagName');
+const correctAnswerAudio = document.getElementById('correctAnswerAudio');
 
 let currentFlagIndex = 0;
 let currentPlayer = null;
@@ -146,8 +147,10 @@ function handleCorrectAnswer(flag) {
 
     if (currentPlayer === 1) {
         scores.player1 += 1;
+        pedroAnimation(1); // Call animation for player 1
     } else {
         scores.player2 += 1;
+        pedroAnimation(2); // Call animation for player 1
     }
 
     updateScore();
@@ -211,4 +214,26 @@ function resetPlayer() {
     player1Button.classList.remove('active');
     player2Button.classList.remove('active');
     currentPlayer = null;
+}
+
+function pedroAnimation(playerNumber) {
+    const playerElement = document.getElementById(`player${playerNumber}`);
+    
+    if (!playerElement || !correctAnswerAudio) return;
+
+    correctAnswerAudio.currentTime = 0;
+    correctAnswerAudio.play();
+
+    // Remove glow animation
+    playerElement.classList.remove('glow');
+    // Add the animation class
+    playerElement.classList.add('animation-active');
+
+    // Remove the animation class and stop audio after 5 seconds
+    setTimeout(() => {
+        correctAnswerAudio.pause();
+        correctAnswerAudio.currentTime = 0;
+        playerElement.classList.add('glow');
+        playerElement.classList.remove('animation-active');
+    }, 6000);
 }
