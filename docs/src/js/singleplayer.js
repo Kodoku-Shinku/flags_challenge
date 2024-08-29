@@ -196,16 +196,23 @@ function resetPlayer() {
     currentPlayer = null;
 }
 
+f/**
+ * Plays an animation and sound effect for the player.
+ * 
+ * This function:
+ * - Resets and plays a sound effect.
+ * - Temporarily removes the glow animation from the player's element and adds a new animation.
+ * - Restores the glow animation and stops the sound effect after 6 seconds.
+ */
 function pedroAnimation() {
+    
     correctAnswerAudio.currentTime = 0;
     correctAnswerAudio.play();
 
-    //Remove glow animation
     player.classList.remove('glow');
-    // Add the animation class
     player.classList.add('animation-active');
 
-    // Remove the animation class and stop audio after 5 seconds
+    // After 6 seconds, stop the animation and sound effect
     setTimeout(() => {
         correctAnswerAudio.pause();
         correctAnswerAudio.currentTime = 0;

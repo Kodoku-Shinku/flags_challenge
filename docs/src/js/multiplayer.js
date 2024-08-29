@@ -216,24 +216,36 @@ function resetPlayer() {
     currentPlayer = null;
 }
 
+/**
+ * Plays an animation and sound effect for a specified player when they answer correctly.
+ * 
+ * This function:
+ * - Resets and plays a sound effect.
+ * - Temporarily removes the glow animation from the player's element and adds a new animation.
+ * - Restores the glow animation and stops the sound effect after 6 seconds.
+ * 
+ * @param {number} playerNumber - The number of the player (e.g., 1 or 2) whose animation will be triggered.
+ */
 function pedroAnimation(playerNumber) {
+
     const playerElement = document.getElementById(`player${playerNumber}`);
     
     if (!playerElement || !correctAnswerAudio) return;
 
+    // Reset the audio to the beginning and play it
     correctAnswerAudio.currentTime = 0;
     correctAnswerAudio.play();
 
-    // Remove glow animation
     playerElement.classList.remove('glow');
-    // Add the animation class
     playerElement.classList.add('animation-active');
 
-    // Remove the animation class and stop audio after 5 seconds
+    // After 6 seconds, stop the animation and sound
     setTimeout(() => {
+
         correctAnswerAudio.pause();
         correctAnswerAudio.currentTime = 0;
         playerElement.classList.add('glow');
         playerElement.classList.remove('animation-active');
     }, 6000);
 }
+
