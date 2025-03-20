@@ -24,6 +24,13 @@ body, html {
     height: 60px;
 }
 
+/* Personaliza el botón cuando está presionado */
+.btn-custom1:active {
+    background-color: #00ffee; /* Cambia este color al deseado */
+    border-color: #00ffee;     /* Cambia este color al deseado */
+    box-shadow: none;          /* Opcional: Elimina la sombra del botón si es necesario */
+}
+
 
 /* Imagen del avatar del jugador */
 
