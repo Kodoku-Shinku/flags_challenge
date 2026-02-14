@@ -29,11 +29,29 @@
 
             <div class="col-md-9 align-self-center text-center py-4">
                 <button class="btn btn-primary mb-4" id="startButton">Iniciar Juego</button>
+                <div class="mb-3 d-flex justify-content-center align-items-center gap-2">
+                    <label for="difficultySelect" class="me-2">Dificultad:</label>
+                    <select id="difficultySelect" class="form-select" style="max-width: 180px;">
+                        <option value="easy">Fácil</option>
+                        <option value="medium" selected>Media</option>
+                        <option value="hard">Difícil</option>
+                    </select>
+                    <button class="btn btn-secondary ms-3" id="pauseButton" disabled>Pausar</button>
+                </div>
                 <div id="gameArea" style="display: none;">
+                    <!-- Temporizador arriba de la bandera con barra + texto -->
+                    <div class="mb-2">
+                        <div id="timerBarContainer" aria-live="polite" aria-label="Temporizador">
+                            <div id="timerBar"></div>
+                            <span id="timerText"></span>
+                        </div>
+                    </div>
                     <img class="img-fluid rounded mb-4" id="flagImage" src="" alt="Bandera">
                     <div class="text-center">
                         <input class="mb-3" type="text" id="answerInput" placeholder="Nombre del país">
                         <button class="btn btn-primary m-3" id="submitAnswerButton">Enviar Respuesta</button>
+                        <button class="btn btn-warning m-3" id="skipFlagButton">Saltar</button>
+                        <button class="btn btn-info m-3" id="hintButton" disabled>Pista</button>
                     </div>
                     <h4 id="result"></h4>
                     <h4 id="flagName"></h4> <!-- Added this element for flag name -->
@@ -42,6 +60,7 @@
                     <div class="d-flex justify-content-center my-3">
                         <button class="btn btn-success" id="nextFlagButton" style="display: none;">Siguiente Bandera</button>
                     </div>
+                    <div id="sessionSummary" class="mt-3" style="display:none;"></div>
                 </div>
             </div>
         </div>
