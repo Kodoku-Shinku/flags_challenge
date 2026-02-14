@@ -125,5 +125,89 @@ body, html {
     animation: glow 3s infinite;
 }
 
+/* Temporizador: barra de progreso */
+#timerBarContainer {
+  position: relative;
+  height: 18px; /* más gruesa */
+  background: #e9ecef;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 70%; /* más corta que la imagen de la bandera */
+  margin: 0 auto; /* centrar */
+  max-width: 640px; /* limitar ancho máximo */
+}
+#timerBar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  background: #28a745; /* color inicial: verde */
+  transition: width 100ms linear, background-color 150ms linear;
+  /* Striped moving background to imply countdown */
+  background-image: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.25) 25%,
+    rgba(255,255,255,0) 25%,
+    rgba(255,255,255,0) 50%,
+    rgba(255,255,255,0.25) 50%,
+    rgba(255,255,255,0.25) 75%,
+    rgba(255,255,255,0) 75%,
+    rgba(255,255,255,0) 100%
+  );
+  background-size: 24px 24px;
+}
 
-/* ANIMACIONES */ 
+/* Animate stripes */
+.timer-stripes {
+  animation: timerStripes 1s linear infinite;
+}
+@keyframes timerStripes {
+  from { background-position: 0 0; }
+  to { background-position: 24px 0; }
+}
+
+/* Pulse warning when low time */
+.timer-pulse {
+  animation: timerPulse 1s ease-in-out infinite;
+}
+@keyframes timerPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Shake on last seconds */
+.timer-shake {
+  animation: timerShake 0.4s linear infinite;
+}
+@keyframes timerShake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(1px); }
+  50% { transform: translateX(0); }
+  75% { transform: translateX(-1px); }
+  100% { transform: translateX(0); }
+}
+
+/* Text color adapt when very low time */
+.timer-text-low {
+  color: #dc3545; /* red */
+  font-weight: 600;
+}
+
+#timerText {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.9rem;
+  color: #212529;
+  user-select: none;
+}
+
+/* Ajustes responsivos opcionales */
+@media (max-width: 576px) {
+  #timerBarContainer { width: 85%; height: 16px; }
+  #timerText { font-size: 0.8rem; }
+}
+
+/* ANIMACIONES */
