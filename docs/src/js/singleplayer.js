@@ -2,6 +2,7 @@
 
 // Import the flags array from flags.js
 import { flags } from './flags.js';
+import { removeAccents, normalizeAnswer } from './utils.js';
 
 // Variables
 const startButton = document.getElementById('startButton');
@@ -74,7 +75,8 @@ difficultySelect.addEventListener('change', () => {
 });
 
 pauseButton.addEventListener('click', () => {
-    if (!isGameActive || currentPlayer === null || answerInput.disabled) return;
+    // Allow resume even if answerInput is disabled; only block if game inactive or no current player
+    if (!isGameActive || currentPlayer === null) return;
     if (!paused) {
         // Pausar
         pausedRemainingMs = Math.max(0, countdownEnd - Date.now());
@@ -82,6 +84,10 @@ pauseButton.addEventListener('click', () => {
         paused = true;
         pauseButton.textContent = 'Reanudar';
         result.innerHTML = '<span class="text-info">Pausado.</span>';
+
+        // Deshabilitar input y botón de respuesta
+        answerInput.disabled = true;
+        submitAnswerButton.disabled = true;
     } else {
         // Reanudar
         paused = false;
@@ -89,6 +95,10 @@ pauseButton.addEventListener('click', () => {
         result.textContent = '';
         countdownEnd = Date.now() + pausedRemainingMs;
         startTimer();
+
+        // Habilitar input y botón de respuesta
+        answerInput.disabled = false;
+        submitAnswerButton.disabled = false;
     }
 });
 
@@ -96,12 +106,18 @@ hintButton.addEventListener('click', () => {
     if (!isGameActive || currentPlayer === null || answerInput.disabled) return;
     const flag = availableFlags[currentFlagIndex];
     if (!flag) return;
-    // Pista sencilla: primera letra y continente si estuviera disponible en datos (name only here)
+
+    // Pista adicional: continente y cantidad de letras
     const firstLetter = flag.name.trim().charAt(0);
-    result.innerHTML = `<span class="text-info">Pista: empieza con "${firstLetter}"</span>`;
+    const letterCount = flag.name.trim().length;
+    const continent = flag.continent || 'Desconocido'; // Asegurarse de que los datos incluyan "continent"
+
+    result.innerHTML = `<span class="text-info">Pista: empieza con "${firstLetter}", tiene ${letterCount} letras y está en el continente: ${continent}.</span>`;
+
     // Penalización de tiempo: -3s
     countdownEnd = Math.max(Date.now(), countdownEnd - 3000);
     updateTimerDisplay();
+
     // Deshabilitar múltiples pistas por bandera (opcional)
     hintButton.disabled = true;
 });
@@ -270,7 +286,22 @@ function loadNextFlag() {
     currentFlagIndex = Math.floor(Math.random() * availableFlags.length);
     const flag = availableFlags[currentFlagIndex];
     flagImage.src = flag.url;
+    // If an image fails to load, remove that flag and automatically load the next one
+    flagImage.onerror = () => {
+        console.warn(`Failed to load flag image: ${flag.url}. Skipping.`);
+        // Remove problematic flag
+        availableFlags.splice(currentFlagIndex, 1);
+        // Inform user briefly
+        result.innerHTML = `<span class="text-warning">No se pudo cargar la imagen de la bandera. Saltando...</span>`;
+        // Clear handlers to avoid residual callbacks
+        flagImage.onerror = null;
+        flagImage.onload = null;
+        // Try next flag after a short delay
+        setTimeout(() => loadNextFlag(), 200);
+    };
+    // On successful load, ensure any previous onerror handler is cleared and sync UI
     flagImage.onload = () => {
+        flagImage.onerror = null;
         syncTimerWidthToImage();
     };
     syncTimerWidthToImage();
@@ -315,28 +346,6 @@ function handlePlayerClick(player) {
         pausedRemainingMs = 0;
         startTimer();
     }
-}
-
-/**
- * Removes accents from a string and converts it to lowercase.
- * Used to normalize and compare flag names.
- * @param {string} str - The string to be normalized.
- * @returns {string} - The normalized string without accents.
- */
-function removeAccents(str) {
-    return str.normalize('NFD')
-              .replace(/[\u0300-\u036f]/g, '')
-              .toLowerCase();
-}
-
-/**
- * Normaliza y limpia la respuesta del usuario: quita acentos, espacios extra y caracteres especiales comunes.
- */
-function normalizeAnswer(str) {
-    const cleaned = removeAccents(str.trim())
-        .replace(/[^a-z\s\-']/g, '')
-        .replace(/\s+/g, ' ');
-    return cleaned;
 }
 
 /**
@@ -454,15 +463,21 @@ function resetPlayer() {
 function pedroAnimation() {
     
     correctAnswerAudio.currentTime = 0;
-    correctAnswerAudio.play();
+    // Play may be blocked by browser autoplay policies — handle promise rejection
+    const p = correctAnswerAudio.play();
+    if (p && typeof p.catch === 'function') p.catch(() => { /* ignore play errors */ });
 
     player.classList.remove('glow');
     player.classList.add('animation-active');
 
     // After 6 seconds, stop the animation and sound effect
     setTimeout(() => {
-        correctAnswerAudio.pause();
-        correctAnswerAudio.currentTime = 0;
+        try {
+            correctAnswerAudio.pause();
+            correctAnswerAudio.currentTime = 0;
+        } catch (e) {
+            // ignore
+        }
         player.classList.add('glow');
         player.classList.remove('animation-active');
     }, 6000);

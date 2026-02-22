@@ -2,6 +2,7 @@
 
 // Import the flags array from flags.js
 import { flags } from './flags.js';
+import { removeAccents, normalizeAnswer } from './utils.js';
 
 // Variables
 const startButton = document.getElementById('startButton');
@@ -64,6 +65,24 @@ function loadNextFlag() {
     currentFlagIndex = Math.floor(Math.random() * availableFlags.length);
     const flag = availableFlags[currentFlagIndex];
     flagImage.src = flag.url;
+    // If an image fails to load, remove that flag and automatically load the next one
+    flagImage.onerror = () => {
+        console.warn(`Failed to load flag image: ${flag.url}. Skipping.`);
+        // Remove problematic flag
+        availableFlags.splice(currentFlagIndex, 1);
+        // Inform user briefly
+        result.innerHTML = `<span class="text-warning">No se pudo cargar la imagen de la bandera. Saltando...</span>`;
+        // Clear handlers to avoid residual callbacks
+        flagImage.onerror = null;
+        flagImage.onload = null;
+        // Try next flag after a short delay
+        setTimeout(() => loadNextFlag(), 200);
+    };
+    // On successful load, ensure any previous onerror handler is cleared and sync UI
+    flagImage.onload = () => {
+        flagImage.onerror = null;
+        syncTimerWidthToImage();
+    };
     flagName.textContent = '';
     result.textContent = '';
     answerInput.value = '';
@@ -97,34 +116,22 @@ function handlePlayerClick(player) {
 }
 
 /**
- * Removes accents from a string and converts it to lowercase.
- * Used to normalize and compare flag names.
- * @param {string} str - The string to be normalized.
- * @returns {string} - The normalized string without accents.
- */
-function removeAccents(str) {
-    return str.normalize('NFD')
-              .replace(/[\u0300-\u036f]/g, '')
-              .toLowerCase();
-}
-
-/**
  * Checks the player's answer against the current flag's name.
  * Updates the game state based on whether the answer is correct or incorrect.
  */
 function checkAnswer() {
     if (currentPlayer !== null && isGameActive) {
-        const answer = removeAccents(answerInput.value.trim());
+        const answer = normalizeAnswer(answerInput.value);
         const flag = availableFlags[currentFlagIndex];
-        const correctAnswer = removeAccents(flag.name);
+        const correctAnswer = normalizeAnswer(flag.name);
 
         if (answer === '') {
             result.innerHTML = '<span class="text-danger">Por favor ingrese una respuesta.</span>';
             return;
         }
 
-        if (!/^[a-zA-Z\s]+$/.test(answer)) {
-            result.innerHTML = '<span class="text-danger">Solo se permiten letras y espacios.</span>';
+        if (!/^[a-z\s\-']+$/.test(answer)) {
+            result.innerHTML = '<span class="text-danger">Solo se permiten letras, espacios, guiones y apóstrofes.</span>';
             return;
         }
 
@@ -234,16 +241,20 @@ function pedroAnimation(playerNumber) {
 
     // Reset the audio to the beginning and play it
     correctAnswerAudio.currentTime = 0;
-    correctAnswerAudio.play();
+    const p = correctAnswerAudio.play();
+    if (p && typeof p.catch === 'function') p.catch(() => { /* ignore play errors */ });
 
     playerElement.classList.remove('glow');
     playerElement.classList.add('animation-active');
 
     // After 6 seconds, stop the animation and sound
     setTimeout(() => {
-
-        correctAnswerAudio.pause();
-        correctAnswerAudio.currentTime = 0;
+        try {
+            correctAnswerAudio.pause();
+            correctAnswerAudio.currentTime = 0;
+        } catch (e) {
+            // ignore
+        }
         playerElement.classList.add('glow');
         playerElement.classList.remove('animation-active');
     }, 6000);
